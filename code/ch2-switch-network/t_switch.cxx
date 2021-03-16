@@ -7,7 +7,7 @@ int  cm[NUM_TS];   //控制存储器
 
 int c_mode = 0;            //控制方式: 0-输入控制, 1-输出控制
 
-char sp_in[NUM_TS]={'\0'};  //输入语音信息
+char sp_in[NUM_TS]={'A','B','C','7','8','9'};  //输入语音信息
 char sp_out[NUM_TS]={'\0'};  //输出语音信息
 
 char tolower(char c)
@@ -60,16 +60,15 @@ void setCM()
 	int i=0;
 	int data[NUM_TS]={0};
 	
-	for(i=0;i<NUM_TS;i++){
-		printf("请输入控制存储器内容: ", i); //输入方式： 数字 数字 数字 数字 数字 数字 数字 数字 
-		scanf("%d %d %d %d %d %d", &data[0],&data[1],&data[2],&data[3],&data[4],&data[5]);
-		if( data[0] >=0 && data[0] < NUM_TS) cm[0] = data[0];
-		if( data[1] >=0 && data[1] < NUM_TS) cm[1] = data[1];
-		if( data[2] >=0 && data[2] < NUM_TS) cm[2] = data[2];
-		if( data[3] >=0 && data[3] < NUM_TS) cm[3] = data[3];
-		if( data[4] >=0 && data[4] < NUM_TS) cm[4] = data[4];
-		if( data[5] >=0 && data[5] < NUM_TS) cm[5] = data[5];
-	}
+	printf("请输入控制存储器内容: "); //输入方式： 数字 数字 数字 数字 数字 数字 数字 数字 
+	scanf("%d %d %d %d %d %d", &data[0],&data[1],&data[2],&data[3],&data[4],&data[5]);
+	if( data[0] >=0 && data[0] < NUM_TS) cm[0] = data[0];
+	if( data[1] >=0 && data[1] < NUM_TS) cm[1] = data[1];
+	if( data[2] >=0 && data[2] < NUM_TS) cm[2] = data[2];
+	if( data[3] >=0 && data[3] < NUM_TS) cm[3] = data[3];
+	if( data[4] >=0 && data[4] < NUM_TS) cm[4] = data[4];
+	if( data[5] >=0 && data[5] < NUM_TS) cm[5] = data[5];
+
 }
 
 //显示语音信息
@@ -89,11 +88,9 @@ void showSpeech(char  data[NUM_TS], const char* tip)
 void doSwitch()
 {
 		
-	int i=0,j=0,k=0; //i-入线的时隙, j-出线的时隙
+	int i=0,j=0; //i-入线的时隙, j-出线的时隙
 	
-	//
-	printf("请输入语音信息(%d时隙): ", NUM_TS);
-	scanf("%c %c %c %c %c %c", &sp_in[0],&sp_in[1],&sp_in[2],&sp_in[3],&sp_in[4],&sp_in[5]);
+
 	
 	showSpeech(sp_in,"交换之前\n");
 	
@@ -125,7 +122,7 @@ int menu()
     char  ch = 'q';
 	char  str[255]={'\0'};
     do{
-        printf("0. 显示当前S-接线器信息\n");
+        printf("0. 显示当前T-接线器信息\n");
         printf("1. 选择控制方式: 输入控制/输出控制\n");
         printf("2. 设置CM的内容\n");
         printf("3. 执行交换\n");
