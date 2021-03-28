@@ -3,12 +3,12 @@
 #define NUM_TS  4    //每帧的时隙数
 #define NUM_HW  3    //HighWay线数目：3x3的S接线器
 
-int cm[NUM_HW][NUM_TS];   //控制存储器, cm[0],cm[1],..., 代表每个控制存储器
+int cm[NUM_HW][NUM_TS];   //控制存储器, cm[0],cm[1],..., 代表每个HW上的控制存储器
 
-//每条HW线上的输入一帧的语音信息, sp_in[0],sp_in[1],...
+//每条HW线上的输入一帧的语音(speech)信息, sp_in[0],sp_in[1],...
 char sp_in[NUM_HW][NUM_TS] = {{'A','B','C','D'},{'6','7','8','9'},{'E','F','G','H'}};
 
-//每条HW线上的输出一帧的语音信息
+//每条HW线上的输出一帧的语音(speech)信息
 char sp_out[NUM_HW][NUM_TS] = {'0'};
 
 int c_mode = 0;            //控制方式: 0-输入控制, 1-输出控制
@@ -63,6 +63,7 @@ void  setMode()
 	
 }
 
+//设置控制存储器内容
 void setCM()
 {
 	int i=0;
@@ -136,7 +137,7 @@ int menu()
         printf("3. 执行交换\n");
         printf("q. 退出系统\n");
         printf("请输入你的选择: ");
-        scanf("%s", &str);
+        scanf("%s", str);
 
         ch = tolower(str[0]); //转为小写字母
         if(ch=='0'){

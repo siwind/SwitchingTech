@@ -7,8 +7,8 @@ int  cm[NUM_TS];   //控制存储器
 
 int c_mode = 0;            //控制方式: 0-输入控制, 1-输出控制
 
-char sp_in[NUM_TS]={'A','B','C','7','8','9'};  //输入语音信息
-char sp_out[NUM_TS]={'\0'};  //输出语音信息
+char sp_in[NUM_TS]={'A','B','C','7','8','9'};  //输入端单条HW线上的输入语音信息
+char sp_out[NUM_TS]={'\0'};  //输出端单条HW线上的输出语音信息
 
 char tolower(char c)
 {//字母转换为小写
@@ -27,8 +27,8 @@ void showSwitch()
 	printf("交换容量(时隙x时隙)： %d x %d \n", NUM_TS,NUM_TS);
 	
 	printf("控制方式：");
-	if( c_mode == 0 ) printf("输入控制\n");
-	else printf("输出控制\n");
+	if( c_mode == 0 ) printf("输入控制 (控制写入, 顺序读出)\n");
+	else printf("输出控制 (顺序写入, 控制读出)\n");
 	
 	printf("控制存储器内容：");
 	for(i=0;i<NUM_TS;i++){
@@ -55,12 +55,13 @@ void  setMode()
 	
 }
 
+//设置控制存储器内容
 void setCM()
 {
 	int i=0;
 	int data[NUM_TS]={0};
 	
-	printf("请输入控制存储器内容: "); //输入方式： 数字 数字 数字 数字 数字 数字 数字 数字 
+	printf("请输入控制存储器内容: "); //输入方式： 数字 数字 数字 数字 数字 数字 
 	scanf("%d %d %d %d %d %d", &data[0],&data[1],&data[2],&data[3],&data[4],&data[5]);
 	if( data[0] >=0 && data[0] < NUM_TS) cm[0] = data[0];
 	if( data[1] >=0 && data[1] < NUM_TS) cm[1] = data[1];
@@ -95,20 +96,31 @@ void doSwitch()
 	showSpeech(sp_in,"交换之前\n");
 	
 	char ch = '\0';
+	
+	//半个时钟周期, 处理输入HW线信息
 	for(i=0;i<NUM_TS;i++){  //对每个时隙进行交换
 		
 		ch = sp_in[i];   //输入的第i时隙的话音信息
 			
 			//======================
 			//作业的内容
-			//j = ?  找到交换后，在出线上的时隙
+			// 找到 语音信息 ch 存放在 sm的位置.
 			//if( c_mode == 0 )  j = ?      //输入控制
 			//else j = ?                    //输出控制
-			//
+			// sm[j] = ch;             //存放语音信息到控制存储器sm.
 			//======================
 			
-			
-		sp_out[j] = ch;   //输入的语音信息被交换到输出的HW线k上。
+    }
+    
+    //半个时钟周期, 处理输出HW线信息
+    for(i=0;i<NUM_TS;i++){//
+        //======================
+        //作业内容, 找到时隙i时，从sm的哪个位置取出语音信息, 输出到sp_out[]上。
+        // if( c_mode == 0 ) j=?
+        // else j = ?
+        // ch = sm[j]
+
+		sp_out[i] = ch;   //输入的语音信息被交换到输出的HW线上。
 		
 	}
 	
@@ -128,7 +140,7 @@ int menu()
         printf("3. 执行交换\n");
         printf("q. 退出系统\n");
         printf("请输入你的选择: ");
-        scanf("%s", &str);
+        scanf("%s", str);
 
         ch = tolower(str[0]); //转为小写字母
         if(ch=='0'){
@@ -140,7 +152,7 @@ int menu()
         }else if(ch=='3'){
 			doSwitch();
         }else if(ch!='q'){
-            printf("\n未知的命令. %c \n", ch);
+            printf("\n未知的命令. %s \n", str);
         }
 
     }while(ch!='q');
